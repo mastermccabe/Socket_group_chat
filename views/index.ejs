@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script type="text/javascript" src='http://code.jquery.com/jquery-1.10.2.min.js'></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+  <script src=" https://code.jquery.com/jquery-3.2.1.slim.min.js "></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js ">
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js">
+  </script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var socket = io.connect();
+
+      var name = prompt("Please enter your name");
+      socket.emit('name', {
+        name: name
+      });
+
+      socket.on('new_user', function(data) {
+        var new_user_div = "<div class='card' style='height: 10rem; width: 20rem;' id='" + data.name + "'>" + data.name + "</div>"
+        $('#new_user_div').append(new_user_div)
+      })
+      socket.on('existing_users', function(data) {
+        for (key in data.users) {
+          console.log(data.users[key]);
+          var new_user_div = "<div class='card' style='height: 10rem; width: 20rem;' id='" + data.users[key] + "'>" + data.users[key] + "</div>"
+          $('#new_user_div').append(new_user_div)
+        }
+
+      })
+
+    })
+  </script>
+  <meta charset="utf-8">
+  <title>Group Chat</title>
+</head>
+
+<body>
+  <div id="new_user_div" class="container">
+  </div>
+
+</body>
+
+</html>
